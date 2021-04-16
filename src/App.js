@@ -8,16 +8,19 @@ import InfoBox from './InfoBox';
 import Map from './Map';
 import Table from './Table';
 import { sortData } from './util';
+import LineGraph from './LineGraph';
 
 function App() {
 
   const[countries, setCountries]=useState([]);
-  const[country, setCountry]=useState(['worldwide'])
-  const[countryInfo, setcountryInfo]=useState({})
+  const[country, setInputCountry]=useState("worldwide");
+  const[countryInfo, setcountryInfo]=useState({});
   const[tableData, settableData]=useState([]);
 
   useEffect(()=>{
-    fetch("https://disease.sh/v3/covid-19/all").then((response)=> response.json()).then((data) =>{
+    fetch("https://disease.sh/v3/covid-19/all")
+    .then((response)=> response.json())
+    .then((data) =>{
       setcountryInfo(data);
     });
 },[]);
@@ -28,7 +31,8 @@ function App() {
     //async->send a request,wait for it,do something with it
 
     const getCountriesData = async () => {
-      await fetch("https://disease.sh/v3/covid-19/countries").then((response) => response.json())
+       fetch("https://disease.sh/v3/covid-19/countries")
+       .then((response) => response.json())
       .then((data) => {
 
         const countries = data.map((country) => (
@@ -37,7 +41,7 @@ function App() {
             value: country.countryInfo.iso2 //UK,USA
           }
         ));
-          const sortedData=sortData(data);
+         let sortedData=sortData(data);
           settableData(sortedData);
           setCountries(countries);
       })
@@ -48,18 +52,20 @@ function App() {
 
   const onCountryChange = async (event) => {
     const countryCode =event.target.value;
-    setCountry(countryCode);
+    
 
-    const url = countryCode ==="worldwide" ? "https://disease.sh/v3/covid-19/countries/all" : `https://disease.sh/v3/covid-19/countries/${countryCode}`;
-
-    await fetch(url) .then (response => response.json()).then(data => {
-      setCountry(countryCode);
+    const url = countryCode ==="worldwide" ? "https://disease.sh/v3/covid-19/all" : `https://disease.sh/v3/covid-19/countries/${countryCode}`;
+    console.log(url);
+    await fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      setInputCountry(countryCode);
 
       //All of the data from the country response
       setcountryInfo(data);
     });
   };
-
+  
   console.log("Country Info >>>",countryInfo);
   return (
     <div className="app">
@@ -81,7 +87,7 @@ function App() {
       </div>
 
       <div className="app__stats">
-            <InfoBox title="Coronavirus cases" cases={countryInfo.todayCases}total={countryInfo.cases}/>
+            <InfoBox title="Coronavirus Cases" cases={countryInfo.todayCases}total={countryInfo.cases}/>
 
             <InfoBox title="Recoverd" cases={countryInfo.todayRecovered} total={countryInfo.recovered}/>
 
@@ -96,6 +102,7 @@ function App() {
             <h3>Live Cases by Country</h3>
             <Table countries={tableData}/>
             <h3>Worldwide new cases</h3>
+            <LineGraph />
           </CardContent>
       </Card>
 
