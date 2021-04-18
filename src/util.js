@@ -10,12 +10,12 @@ const casesTypeColors = {
     recovered: {
         hex: "#7dd71d",
       
-        multiplier:900,
+        multiplier:280,
     },
     deaths: {
         hex: "#fb4443",
        
-     multiplier:1800,
+     multiplier:1100,
     },
 };
 
@@ -35,6 +35,9 @@ export const sortData = (data) => {
     //sortedDat a.sort((a,b) => (a.cases>b.cases ? -1 : 1));
     //return sortedData;
 };
+
+export const prettyPrintStat = (stat) =>
+    stat ? `+${numeral(stat).format("0.0a")}` : "+0";
 
 //Draw circles on the map with interactive tooltop
 export const showDataOnMap = (data, casesType="cases") => 
@@ -56,7 +59,7 @@ export const showDataOnMap = (data, casesType="cases") =>
                    />
                    <div className="info-name">{country.country}</div>
                    <div className="info-confirmed">Cases: {numeral(country.cases).format("0.0")}</div>
-                   <div className="info-recovered">Recoverd: {numeral(country.recovered).format("0.0")}</div>
+                   <div className="info-recovered">Recovered: {numeral(country.recovered).format("0.0")}</div>
                    <div className="info-deaths">Deaths: {numeral(country.deaths).format("0.0")}</div>
                    
                </div>

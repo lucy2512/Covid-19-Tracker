@@ -3,6 +3,7 @@ import { Line } from "react-chartjs-2";
 //Use the chartjs@2.9 not the latest one
 import numeral from "numeral";
 
+
 const options = {
     legend: {
         display: false,
@@ -65,13 +66,13 @@ const buildChartData = (data,casesType) => {
     }
     return chartData;
 };
-function LineGraph({casesType='cases'}) {
+function LineGraph({casesType="cases",...props}) {
     const[data, setData]=useState({});
     
     useEffect(()=> {
         const fetchData = async () => {
              await fetch(`https://disease.sh/v3/covid-19/historical/all?lastdays=120`).then((response) => response.json()).then( (data) =>{
-            let chartData = buildChartData(data,"cases");
+            let chartData = buildChartData(data,casesType);
             setData(chartData);
         });
         };
@@ -82,15 +83,15 @@ function LineGraph({casesType='cases'}) {
 
     
     return (
-        <div>
-            <h1>I am Parthib</h1>
+        <div className={props.className}>
+            
             {data?.length > 0 && (
                 <Line 
                 options={options}
                 data={{
                     datasets: [
                         {
-                            backgroundColor: "rgba(204, 16, 52, 0.5",
+                            backgroundColor: "rgba(204, 16, 52, 0.5)",
                             borderColor:"#CC1034",
                             data: data,
                     },
