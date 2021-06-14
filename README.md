@@ -17,7 +17,5 @@ https://covid-19-tracker-a9cf5.firebaseapp.com/
 
 - Clone this repo
 
-- Add .env file and create a variable name REACT_WEATHER_API_KEY and add your api key (check open weather api docs)
-
 - Then run <code>npm start</code>
 
